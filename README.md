@@ -54,7 +54,7 @@ Only positive excess counts. $0.08/unit is an assumed US commercial energy rate 
 
 ## Project Structure
 
-energyguard/
+``` energyguard/
 ├── ENERGY_ANOMALY.ipynb
 ├── .gitignore
 ├── README.md
@@ -129,6 +129,7 @@ energyguard/
 └── select-building/
     ├── ExistingBuilding.jsx
     └── NewBuilding.jsx
+```
 
 ## Dataset
 
@@ -175,7 +176,7 @@ npm run dev
 ```
 
 **Environment variables (create backend/.env):**
-MONGODB_URI
+``` MONGODB_URI
 JWT_SECRET
 GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET
@@ -183,6 +184,7 @@ GOOGLE_CALLBACK_URL=http://localhost:5000/auth/google/callback
 FRONTEND_URL=http://localhost:5173
 FASTAPI_URL=http://localhost:8000
 NODE_ENV=development
+```
 
 ## Author
 
