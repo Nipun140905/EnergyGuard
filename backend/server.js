@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const passport = require('./config/passport');
 
 const app = express();
+app.set('trust proxy', 1);
 
 connectDB();
 
@@ -23,7 +24,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000,
     },
 }));
