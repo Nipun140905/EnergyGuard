@@ -2,6 +2,8 @@
 
 Smart building energy anomaly detection dashboard built on the Building Data Genome Project 2 (BDGP2) dataset.
 
+**Live Demo:** [energy-guard-nine.vercel.app](https://energy-guard-nine.vercel.app/)
+
 ## Overview
 
 EnergyGuard detects operational and behavioral anomalies in building energy consumption across eight energy streams: electricity, water, gas, steam, hot water, chilled water, irrigation, and solar. The detection pipeline uses an ensemble of three unsupervised machine learning models with majority voting. Each flagged anomaly is assigned a human-readable explanation and an estimated cost impact.
