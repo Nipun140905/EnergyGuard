@@ -192,8 +192,8 @@ FASTAPI_URL=http://localhost:8000
 NODE_ENV=development
 ```
 **Environment variables (Railway — ML API service):**
-```DATA_DIR=/data/bdgp2
-```
+DATA_DIR=/data/bdgp2
+
 ## Author
 
 **Nipun Garg**  
