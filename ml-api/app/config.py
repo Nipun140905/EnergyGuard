@@ -29,7 +29,7 @@ NIGHT_HOURS = list(range(23, 24)) + list(range(0, 6))  # 23,0,1,2,3,4,5
 WEEKEND_MULTIPLIER = 1.5
 
 # ── Dataset Files ──────────────────────────────────────────────────────────────
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "bdgp2")
+DATA_DIR = os.environ.get("DATA_DIR", os.path.join(os.path.dirname(__file__), "..", "data", "bdgp2"))
 
 CLEANED_ENERGY_FILES = {
     "electricity":  "electricity_cleaned.csv",
