@@ -12,7 +12,7 @@ EnergyGuard detects operational and behavioral anomalies in building energy cons
 - Backend: Node.js, Express, Passport.js (Google OAuth 2.0), JWT, MongoDB
 - Frontend: React (Vite), Bootstrap, Chart.js
 - Database: MongoDB Atlas (production), MongoDB local (development)
-- Deployment: Render
+- Deployment: Railway (backend + ML API), Vercel (frontend)
 
 ## ML Pipeline
 
@@ -54,53 +54,53 @@ Only positive excess counts. $0.08/unit is an assumed US commercial energy rate 
 
 ## Project Structure
 
-``` energyguard/
+```energyguard/
 ├── ENERGY_ANOMALY.ipynb
 ├── .gitignore
 ├── README.md
 ├── ml-api/
-│   ├── main.py
-│   ├── requirements.txt
-│   ├── data/
-│   │   └── bdgp2/  (download from Kaggle, see Dataset section)
-│   └── app/
-│       ├── config.py
-│       ├── models/
-│       │   └── schemas.py
-│       ├── routers/
-│       │   ├── analyse.py
-│       │   ├── buildings.py
-│       │   └── health.py
-│       ├── services/
-│       │   ├── pipeline.py
-│       │   └── csv_validator.py
-│       └── utils/
-│           ├── data_loader.py
-│           ├── explainer.py
-│           └── feature_engineering.py
+│ ├── main.py
+│ ├── requirements.txt
+│ ├── data/
+│ │ └── bdgp2/ (see Dataset section — not populated in this repo)
+│ └── app/
+│ ├── config.py
+│ ├── models/
+│ │ └── schemas.py
+│ ├── routers/
+│ │ ├── analyse.py
+│ │ ├── buildings.py
+│ │ └── health.py
+│ ├── services/
+│ │ ├── pipeline.py
+│ │ └── csv_validator.py
+│ └── utils/
+│ ├── data_loader.py
+│ ├── explainer.py
+│ └── feature_engineering.py
 ├── backend/
-│   ├── server.js
-│   ├── package.json
-│   ├── config/
-│   │   ├── db.js
-│   │   └── passport.js
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   └── buildingController.js
-│   ├── middleware/
-│   │   ├── authMiddleware.js
-│   │   └── uploadMiddleware.js
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Building.js
-│   │   └── AnalysisCache.js
-│   ├── routes/
-│   │   ├── auth.js
-│   │   └── buildings.js
-│   └── services/
-│       ├── csvValidator.js
-│       ├── emailService.js
-│       └── fastApiService.js
+│ ├── server.js
+│ ├── package.json
+│ ├── config/
+│ │ ├── db.js
+│ │ └── passport.js
+│ ├── controllers/
+│ │ ├── authController.js
+│ │ └── buildingController.js
+│ ├── middleware/
+│ │ ├── authMiddleware.js
+│ │ └── uploadMiddleware.js
+│ ├── models/
+│ │ ├── User.js
+│ │ ├── Building.js
+│ │ └── AnalysisCache.js
+│ ├── routes/
+│ │ ├── auth.js
+│ │ └── buildings.js
+│ └── services/
+│ ├── csvValidator.js
+│ ├── emailService.js
+│ └── fastApiService.js
 └── frontend/
 ├── index.html
 ├── package.json
@@ -109,44 +109,49 @@ Only positive excess counts. $0.08/unit is an assumed US commercial energy rate 
 ├── App.jsx
 ├── main.jsx
 ├── hooks/
-│   └── useAuth.js
+│ └── useAuth.js
 ├── utils/
-│   └── api.js
+│ └── api.js
 ├── styles/
-│   └── global.css
+│ └── global.css
 ├── pages/
-│   ├── Landing.jsx
-│   ├── Login.jsx
-│   ├── Dashboard.jsx
-│   └── SelectBuilding.jsx
+│ ├── Landing.jsx
+│ ├── Login.jsx
+│ ├── Dashboard.jsx
+│ └── SelectBuilding.jsx
 └── components/
-    ├── dashboard/
-    │   ├── DashboardNavbar.jsx
-    │   ├── StreamTabs.jsx
-    │   ├── KPICards.jsx
-    │   ├── EnergyChart.jsx
-    │   └── AnomalyTable.jsx
+├── dashboard/
+│ ├── DashboardNavbar.jsx
+│ ├── StreamTabs.jsx
+│ ├── KPICards.jsx
+│ ├── EnergyChart.jsx
+│ └── AnomalyTable.jsx
 └── select-building/
-    ├── ExistingBuilding.jsx
-    └── NewBuilding.jsx
+├── ExistingBuilding.jsx
+└── NewBuilding.jsx
 ```
-
 ## Dataset
 
 Building Data Genome Project 2 (BDGP2): 1,636 buildings across 19 sites, 2016-2017.
 
-Download: https://www.kaggle.com/datasets/claytonmiller/buildingdatagenomeproject2
+Original source: https://www.kaggle.com/datasets/claytonmiller/buildingdatagenomeproject2
 
-After downloading, place these files in `ml-api/data/bdgp2/`:
-- electricity_cleaned.csv
-- water_cleaned.csv
-- gas_cleaned.csv
-- steam_cleaned.csv
-- hotwater_cleaned.csv
-- chilledwater_cleaned.csv
-- irrigation_cleaned.csv
-- solar_cleaned.csv
-- metadata.csv
+The cleaned dataset files (`metadata.csv` + 8 energy stream CSVs, ~297MB total) are **not stored directly in this repository**. They're distributed as a zipped asset on this repo's [Releases page](https://github.com/Nipun140905/EnergyGuard/releases) instead of via Git LFS, to avoid GitHub's LFS bandwidth/storage quotas and Railway's lack of native Git LFS support during builds.
+
+**For local development:**
+1. Download `bdgp2_data.zip` from the Releases page (or the original Kaggle source above)
+2. Extract into `ml-api/data/bdgp2/` so the files sit directly under that folder:
+   - electricity_cleaned.csv
+   - water_cleaned.csv
+   - gas_cleaned.csv
+   - steam_cleaned.csv
+   - hotwater_cleaned.csv
+   - chilledwater_cleaned.csv
+   - irrigation_cleaned.csv
+   - solar_cleaned.csv
+   - metadata.csv
+
+**For production (Railway):** the ML API service reads from a persistent Railway volume mounted at `/data`, populated once from the same Release asset, rather than from the repo's `ml-api/data/bdgp2/` folder. This is controlled by the `DATA_DIR` environment variable in `ml-api/app/config.py`, which defaults to the local repo path if `DATA_DIR` isn't set — so local dev and production read from different places without any code branching.
 
 ## Local Development
 
@@ -176,7 +181,8 @@ npm run dev
 ```
 
 **Environment variables (create backend/.env):**
-``` MONGODB_URI
+
+```MONGODB_URI
 JWT_SECRET
 GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET
@@ -185,7 +191,9 @@ FRONTEND_URL=http://localhost:5173
 FASTAPI_URL=http://localhost:8000
 NODE_ENV=development
 ```
-
+**Environment variables (Railway — ML API service):**
+```DATA_DIR=/data/bdgp2
+```
 ## Author
 
 **Nipun Garg**  
